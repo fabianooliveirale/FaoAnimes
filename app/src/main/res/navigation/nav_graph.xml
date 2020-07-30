@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment2">
+    <fragment
+        android:id="@+id/splashFragment2"
+        android:name="com.fabiano.faoanime.screens.fragments.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <argument
+            android:name="modelId"
+            app:argType="string" />
+        <action
+            android:id="@+id/toHomeScreen"
+            app:destination="@id/homeFragment"
+            app:exitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.fabiano.faoanime.screens.fragments.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/animesFragment"
+        android:name="com.fabiano.faoanime.screens.fragments.AnimesFragment"
+        android:label="fragment_animes"
+        tools:layout="@layout/fragment_animes" />
+</navigation>
