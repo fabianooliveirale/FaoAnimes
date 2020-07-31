@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#16376c</color>
     <color name="colorAccent">#fff</color>
     <color name="alcroOnyx">#1a181a</color>
+    <color name="dimGray">#696969</color>
 </resources>

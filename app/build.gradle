@@ -83,5 +83,11 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
 
+    //Animation
+    implementation 'com.daimajia.easing:library:2.1@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
 
+    //RxJava
+    def rx_version = '3.0.0'
+    implementation "io.reactivex.rxjava3:rxkotlin:$rx_version"
 }

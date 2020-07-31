@@ -15,8 +15,55 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="false">
-        <include layout="@layout/app_toolbar"
-            android:id="@+id/toolbarInclude"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/toolbarInclude"
+                layout="@layout/app_toolbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintSearch"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/colorPrimary"
+                android:paddingHorizontal="12dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbarInclude"
+                tools:visibility="visible">
+
+
+                <EditText
+                    android:id="@+id/editTextSearch"
+                    android:theme="@style/textInput"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorAccent"
+                    android:ems="10"
+                    android:hint="@string/search"
+                    android:inputType="textPersonName"
+                    android:padding="12dp"
+                    android:textColor="@color/alcroOnyx"
+                    android:text="@{viewModel.searchString}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigationDrawer"
@@ -31,6 +78,7 @@
                 layout="@layout/navigation_view_items"
                 android:id="@+id/navigationInclude" />
         </com.google.android.material.navigation.NavigationView>
+
     </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>

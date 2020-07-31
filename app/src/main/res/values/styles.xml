@@ -7,4 +7,13 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="textInput" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="errorIconDrawable">@null</item>
+        <item name="hintTextColor">@color/dimGray</item>
+        <item name="boxBackgroundColor">@color/colorAccent</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="errorTextColor">@color/dimGray</item>
+        <item name="colorControlActivated">@color/dimGray</item>
+    </style>
 </resources>

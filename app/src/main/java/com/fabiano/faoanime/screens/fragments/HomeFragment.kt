@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.fabiano.faoanime.R
 import com.fabiano.faoanime.databinding.FragmentHomeBinding
 import com.fabiano.faoanime.viewModels.HomeViewModel
-import kotlinx.android.synthetic.main.app_toolbar.*
-import kotlinx.android.synthetic.main.app_toolbar.view.*
 
 class HomeFragment : BaseDrawerFragment() {
 
@@ -43,5 +39,4 @@ class HomeFragment : BaseDrawerFragment() {
         fragmentHomeBinding.navigationInclude.viewModel = homeViewModel
         fragmentHomeBinding.toolbarInclude.viewModel = homeViewModel
     }
-
 }
