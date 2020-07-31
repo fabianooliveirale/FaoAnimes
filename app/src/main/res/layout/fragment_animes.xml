@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".screens.fragments.AnimesFragment">
+    tools:context=".screens.animes.AnimesFragment">
 
     <data>
         <variable
             name="viewModel"
-            type="com.fabiano.faoanime.viewModels.AnimesViewModel" />
+            type="com.fabiano.faoanime.screens.animes.AnimesViewModel" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -56,7 +56,6 @@
                     android:inputType="textPersonName"
                     android:padding="12dp"
                     android:textColor="@color/alcroOnyx"
-                    android:text="@{viewModel.searchString}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

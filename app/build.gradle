@@ -75,11 +75,12 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
-    //Retrofit - Okhttp
+    //Retrofit - Okhttp - rxjavaAdapter
     def retrofit_version = '2.9.0'
     def okhttp3_version = '4.8.0'
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
 
@@ -90,4 +91,7 @@ dependencies {
     //RxJava
     def rx_version = '3.0.0'
     implementation "io.reactivex.rxjava3:rxkotlin:$rx_version"
+    implementation "io.reactivex.rxjava3:rxandroid:$rx_version"
+
+
 }

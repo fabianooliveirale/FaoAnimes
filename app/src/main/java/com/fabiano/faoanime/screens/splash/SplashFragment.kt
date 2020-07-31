@@ -1,4 +1,4 @@
-package com.fabiano.faoanime.screens.fragments
+package com.fabiano.faoanime.screens.splash
 
 import android.os.Bundle
 import android.os.Handler

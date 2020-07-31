@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="com.fabiano.faoanime.viewModels.BaseViewModel" />
+        <variable name="viewModel" type="com.fabiano.faoanime.bases.BaseViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

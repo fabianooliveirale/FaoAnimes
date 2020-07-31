@@ -1,4 +1,4 @@
-package com.fabiano.faoanime.screens.fragments
+package com.fabiano.faoanime.screens.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.fabiano.faoanime.R
 import com.fabiano.faoanime.databinding.FragmentHomeBinding
-import com.fabiano.faoanime.viewModels.HomeViewModel
+import com.fabiano.faoanime.bases.BaseDrawerFragment
 
 class HomeFragment : BaseDrawerFragment() {
 

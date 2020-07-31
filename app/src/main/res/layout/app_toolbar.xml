@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.fabiano.faoanime.viewModels.BaseViewModel" />
+            type="com.fabiano.faoanime.bases.BaseViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

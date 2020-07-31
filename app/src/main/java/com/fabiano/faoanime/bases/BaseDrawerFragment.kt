@@ -1,4 +1,4 @@
-package com.fabiano.faoanime.screens.fragments
+package com.fabiano.faoanime.bases
 
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat

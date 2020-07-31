@@ -1,7 +1,8 @@
-package com.fabiano.faoanime.screens.fragments
+package com.fabiano.faoanime.screens.animes
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -13,12 +14,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.fabiano.faoanime.R
 import com.fabiano.faoanime.databinding.FragmentAnimesBinding
+import com.fabiano.faoanime.bases.BaseDrawerFragment
+import com.fabiano.faoanime.interfaces.ResponseInterface
 import com.fabiano.faoanime.utils.ViewAnimation
 import com.fabiano.faoanime.utils.extensions.onTextChanged
-import com.fabiano.faoanime.viewModels.AnimesViewModel
 import kotlinx.android.synthetic.main.fragment_animes.*
 
-class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener {
+class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, ResponseInterface {
 
     lateinit var animesViewModel: AnimesViewModel
     lateinit var fragmentHomeBinding: FragmentAnimesBinding
@@ -61,6 +63,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener {
     private fun initViewModel() {
         animesViewModel = ViewModelProvider(this).get(AnimesViewModel::class.java)
         animesViewModel.drawerInterface = this
+        animesViewModel.responseInterface = this
         fragmentHomeBinding.viewModel = animesViewModel
         fragmentHomeBinding.navigationInclude.viewModel = animesViewModel
     }
@@ -86,4 +89,12 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener {
 
     private fun animateSearch(isGone: Boolean) =
         if (isGone) animation.fadeIn(constraintSearch) else animation.fadeOut(constraintSearch)
+
+    override fun <T> success(response: T) {
+        d("response_fabiano", response.toString())
+    }
+
+    override fun error(error: String) {
+        d("response_fabiano", error)
+    }
 }
