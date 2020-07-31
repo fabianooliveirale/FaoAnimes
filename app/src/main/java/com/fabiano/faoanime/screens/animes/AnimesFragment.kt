@@ -16,6 +16,8 @@ import com.fabiano.faoanime.R
 import com.fabiano.faoanime.databinding.FragmentAnimesBinding
 import com.fabiano.faoanime.bases.BaseDrawerFragment
 import com.fabiano.faoanime.interfaces.ResponseInterface
+import com.fabiano.faoanime.models.responses.SearchReponse
+import com.fabiano.faoanime.requests.SearchRequest
 import com.fabiano.faoanime.utils.ViewAnimation
 import com.fabiano.faoanime.utils.extensions.onTextChanged
 import kotlinx.android.synthetic.main.fragment_animes.*
@@ -91,6 +93,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         if (isGone) animation.fadeIn(constraintSearch) else animation.fadeOut(constraintSearch)
 
     override fun <T> success(response: T) {
+        (response as SearchReponse)
         d("response_fabiano", response.toString())
     }
 

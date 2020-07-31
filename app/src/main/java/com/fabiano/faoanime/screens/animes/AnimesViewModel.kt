@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
 class AnimesViewModel : BaseViewModel(), CoroutineScope {
-    override val coroutineContext: CoroutineContext = Dispatchers.Main
+    override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     val textchanger: (String) -> Unit = debounce(
         500L,

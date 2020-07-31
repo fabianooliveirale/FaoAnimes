@@ -2,13 +2,14 @@ package com.fabiano.faoanime.api
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 class HttpClientBuilderFactory {
     companion object {
         private var okHttpClient: OkHttpClient.Builder? = null
 
-        fun create(headintercepter: Interceptor, followRedirects: Boolean = false): OkHttpClient {
+        fun create(headintercepter: Interceptor): OkHttpClient {
             if (okHttpClient == null){
                 okHttpClient = OkHttpClient().newBuilder()
             }
@@ -16,8 +17,6 @@ class HttpClientBuilderFactory {
             return okHttpClient?.connectTimeout(6000, TimeUnit.MILLISECONDS)
                 ?.readTimeout((1000 * 60).toLong(), TimeUnit.MILLISECONDS)
                 ?.writeTimeout((1000 * 60).toLong(), TimeUnit.MILLISECONDS)
-                ?.followRedirects(followRedirects)
-//                ?.addInterceptor(logInterceptor)
                 ?.cache(null)
                 ?.addInterceptor(headintercepter)
                 ?.build() ?: OkHttpClient().newBuilder().build()
