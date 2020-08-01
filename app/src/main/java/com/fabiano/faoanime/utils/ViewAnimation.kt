@@ -12,7 +12,7 @@ import com.daimajia.androidanimations.library.YoYo
 
 
 class ViewAnimation {
-    private var baseDurationAnime: Long = 890
+    private var baseDurationAnime: Long = 690
     private val easeOut = PathInterpolator(.33f, 1f, .7f, 1f)
     private var handler: Handler? = null
     var inAnimation = false
@@ -182,46 +182,6 @@ class ViewAnimation {
         }, delay)
     }
 
-    fun fadeInDown(
-        view: View,
-        delay: Long = 0,
-        durationAnimation: Long = baseDurationAnime
-    ) {
-
-        view.visibility = View.INVISIBLE
-        handler?.postDelayed({
-            YoYo.with(Techniques.FadeInDown)
-                .duration(durationAnimation)
-                .interpolate(PathInterpolator(.22f, 1f, .36f, 1f))
-                .onStart {
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
-        }, delay)
-
-    }
-
-    fun fadeInDownLogo(
-        view: View,
-        delay: Long = 0,
-        durationAnimation: Long = baseDurationAnime
-    ) {
-
-        view.visibility = View.INVISIBLE
-        handler?.postDelayed({
-            YoYo.with(Techniques.FadeInDown)
-                .duration(durationAnimation)
-                .interpolate(easeOut)
-                .onStart {
-                    view.scaleX = 1.3F
-                    view.scaleY = 1.3F
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
-        }, delay)
-
-    }
-
     fun slideInUp(
         view: View,
         delay: Long = 0,
@@ -233,7 +193,13 @@ class ViewAnimation {
                 .duration(durationAnimation)
                 .onStart { view.visibility = View.VISIBLE }
                 .interpolate(easeOut)
-                .playOn(view)
+                .onStart {
+                    inAnimation = true
+                }
+                .onEnd {
+                    inAnimation = false
+                    view.isGone = true
+                }.playOn(view)
         }, delay)
     }
 
@@ -248,7 +214,12 @@ class ViewAnimation {
                 .duration(durationAnimation)
                 .onStart { view.visibility = View.VISIBLE }
                 .interpolate(easeOut)
-                .playOn(view)
+                .onStart {
+                    inAnimation = true
+                    view.isGone = false
+                }.onEnd {
+                    inAnimation = false
+                }.playOn(view)
         }, delay)
     }
 
@@ -279,12 +250,67 @@ class ViewAnimation {
         }, delay)
     }
 
+    fun dropOut(
+        view: View,
+        delay: Long = 0,
+        duration: Long = baseDurationAnime
+    ) {
+        view.isVisible = false
+        handler?.postDelayed({
+            YoYo.with(Techniques.DropOut)
+                .duration(duration)
+                .interpolate(easeOut)
+                .onStart {
+                    inAnimation = true
+                    view.isGone = false
+                }.onEnd {
+                    inAnimation = false
+                }.playOn(view)
+        }, delay)
+    }
+
+    fun fadeOutUp(
+        view: View,
+        delay: Long = 0,
+        duration: Long = baseDurationAnime
+    ) {
+        handler?.postDelayed({
+            YoYo.with(Techniques.FadeOutUp)
+                .duration(duration)
+                .interpolate(easeOut)
+                .onStart {
+                    inAnimation = true
+                }
+                .onEnd {
+                    inAnimation = false
+                    view.isGone = true
+                }.playOn(view)
+        }, delay)
+    }
+
+    fun fadeInDown(
+        view: View,
+        delay: Long = 0,
+        duration: Long = baseDurationAnime
+    ) {
+        handler?.postDelayed({
+            YoYo.with(Techniques.FadeInDown)
+                .duration(duration)
+                .interpolate(easeOut)
+                .onStart {
+                    inAnimation = true
+                    view.isGone = false
+                }.onEnd {
+                    inAnimation = false
+                }.playOn(view)
+        }, delay)
+    }
+
     fun fadeIn(
         view: View,
         delay: Long = 0,
         duration: Long = baseDurationAnime
     ) {
-        if (inAnimation) return
         handler?.postDelayed({
             YoYo.with(Techniques.FadeIn)
                 .duration(duration)
@@ -303,7 +329,6 @@ class ViewAnimation {
         delay: Long = 0,
         duration: Long = baseDurationAnime
     ) {
-        if (inAnimation) return
         handler?.postDelayed({
             YoYo.with(Techniques.FadeOut)
                 .duration(duration)

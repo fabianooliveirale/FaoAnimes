@@ -1,32 +1,33 @@
 package com.fabiano.faoanime.screens.animes
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log.d
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.fabiano.faoanime.R
-import com.fabiano.faoanime.databinding.FragmentAnimesBinding
 import com.fabiano.faoanime.bases.BaseDrawerFragment
+import com.fabiano.faoanime.databinding.FragmentAnimesBinding
 import com.fabiano.faoanime.interfaces.ResponseInterface
 import com.fabiano.faoanime.models.responses.SearchReponse
-import com.fabiano.faoanime.requests.SearchRequest
 import com.fabiano.faoanime.utils.ViewAnimation
 import com.fabiano.faoanime.utils.extensions.onTextChanged
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import kotlinx.android.synthetic.main.fragment_animes.*
+
 
 class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, ResponseInterface {
 
     lateinit var animesViewModel: AnimesViewModel
     lateinit var fragmentHomeBinding: FragmentAnimesBinding
-    val animation = ViewAnimation()
+    lateinit var menu: Menu
+    private val animation = ViewAnimation()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,9 +42,15 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         return fragmentHomeBinding.root
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initInputText()
+        initAnimation()
+    }
+
+    private fun initAnimation() {
+        animation.slideInDown(toolbarInclude)
     }
 
     private fun initToolbar() {
@@ -90,7 +97,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         if (isGone) activity?.getDrawable(R.drawable.ic_close) else activity?.getDrawable(R.drawable.ic_search)
 
     private fun animateSearch(isGone: Boolean) =
-        if (isGone) animation.fadeIn(constraintSearch) else animation.fadeOut(constraintSearch)
+        if (isGone) animation.fadeInDown(constraintSearch) else animation.fadeOutUp(constraintSearch)
 
     override fun <T> success(response: T) {
         (response as SearchReponse)
