@@ -93,5 +93,7 @@ dependencies {
     implementation "io.reactivex.rxjava3:rxkotlin:$rx_version"
     implementation "io.reactivex.rxjava3:rxandroid:$rx_version"
 
-
+    //picasso
+    def picasso_version = '2.71828'
+    implementation "com.squareup.picasso:picasso:$picasso_version"
 }

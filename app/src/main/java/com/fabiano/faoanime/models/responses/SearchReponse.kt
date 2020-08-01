@@ -11,5 +11,5 @@ data class SearchReponse(
     @SerializedName("request_cache_expiry")
     val requestCacheExpiry: Int? = null,
     @SerializedName("results")
-    val results: List<Anime>? = null
+    val results: ArrayList<Anime>? = null
 )

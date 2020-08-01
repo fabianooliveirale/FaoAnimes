@@ -8,14 +8,18 @@ import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.fabiano.faoanime.R
 import com.fabiano.faoanime.bases.BaseDrawerFragment
 import com.fabiano.faoanime.databinding.FragmentAnimesBinding
 import com.fabiano.faoanime.interfaces.ResponseInterface
+import com.fabiano.faoanime.models.SearchItem
 import com.fabiano.faoanime.models.responses.SearchReponse
+import com.fabiano.faoanime.screens.animes.adapter.AnimesAdapter
 import com.fabiano.faoanime.utils.ViewAnimation
+import com.fabiano.faoanime.utils.extensions.initTwoGridLayout
 import com.fabiano.faoanime.utils.extensions.onTextChanged
 import kotlinx.android.synthetic.main.fragment_animes.*
 
@@ -23,8 +27,8 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
 
     lateinit var animesViewModel: AnimesViewModel
     lateinit var fragmentHomeBinding: FragmentAnimesBinding
+    lateinit var adapter: AnimesAdapter
     private val animation = ViewAnimation()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +48,25 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         super.onViewCreated(view, savedInstanceState)
         initInputText()
         initAnimation()
+        initRecyclerView()
+        liveData()
+    }
+
+    private fun liveData() {
+        animesViewModel.animesLiveData.observe(viewLifecycleOwner, Observer { animes ->
+            adapter.replace(animes)
+        })
+
+        animesViewModel.searchLiveData.observe(viewLifecycleOwner, Observer { searchItem ->
+            searchItem.itemMenu?.icon = animesViewModel.getSearchIcon(searchItem.isGone ?: false)
+            animateSearch(searchItem.isGone ?: false)
+        })
+    }
+
+    private fun initRecyclerView() {
+        with(recyclerView) {
+            this.initTwoGridLayout(adapter)
+        }
     }
 
     private fun initAnimation() {
@@ -77,28 +100,20 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val id: Int = item.itemId
         if (id == R.id.action_search) {
-            setSearch(item)
+            val searchItem = SearchItem(isGone = constraintSearch.isGone, itemMenu = item)
+            animesViewModel.searchLiveData.value = searchItem
             return true
         }
         return false
     }
-
-    private fun setSearch(item: MenuItem) {
-        if (animation.inAnimation) return
-        val isGone = constraintSearch.isGone
-        item.icon = getIcon(isGone)
-        animateSearch(isGone)
-    }
-
-    private fun getIcon(isGone: Boolean): Drawable? =
-        if (isGone) activity?.getDrawable(R.drawable.ic_close) else activity?.getDrawable(R.drawable.ic_search)
 
     private fun animateSearch(isGone: Boolean) =
         if (isGone) animation.fadeInDown(constraintSearch) else animation.fadeOutUp(constraintSearch)
 
     override fun <T> success(response: T) {
         (response as SearchReponse)
-        d("response_fabiano", response.toString())
+        val animes = response.results
+        adapter.replace(animes)
     }
 
     override fun error(error: String) {
