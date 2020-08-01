@@ -17,15 +17,12 @@ import com.fabiano.faoanime.interfaces.ResponseInterface
 import com.fabiano.faoanime.models.responses.SearchReponse
 import com.fabiano.faoanime.utils.ViewAnimation
 import com.fabiano.faoanime.utils.extensions.onTextChanged
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import kotlinx.android.synthetic.main.fragment_animes.*
-
 
 class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, ResponseInterface {
 
     lateinit var animesViewModel: AnimesViewModel
     lateinit var fragmentHomeBinding: FragmentAnimesBinding
-    lateinit var menu: Menu
     private val animation = ViewAnimation()
 
 
