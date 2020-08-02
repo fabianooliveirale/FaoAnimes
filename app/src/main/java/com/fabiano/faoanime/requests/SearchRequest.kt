@@ -11,30 +11,29 @@ class SearchRequest(
     var value: String,
     var closure: (response: SearchReponse?, error: String?) -> (Unit)
 ) {
-
     init {
-        try{init()}catch(e: Exception){  d("ObserverTeste_Fabiano", "Error: ${e.message}")}
+        try {
+            init()
+        } catch (e: Exception) {
+            closure(null, "SearchError_1: ${e.message}")
+        }
     }
 
     private fun init() {
         val observable = NetworkApi.public().search(value)
         observable.subscribeOn(Schedulers.newThread())
             .subscribe(object : Observer<SearchReponse> {
-                override fun onComplete() {
-                    d("ObserverTeste_Fabiano", "OnComplete")
-                }
+                override fun onComplete() {}
 
                 override fun onNext(value: SearchReponse?) {
                     closure(value, null)
                 }
 
                 override fun onError(e: Throwable?) {
-                    closure(null, e?.message)
+                    closure(null, "SearchError_2: ${e?.message}")
                 }
 
-                override fun onSubscribe(d: Disposable?) {
-                    d("ObserverTeste_Fabiano", "onSubscribe")
-                }
+                override fun onSubscribe(d: Disposable?) {}
             })
     }
 }

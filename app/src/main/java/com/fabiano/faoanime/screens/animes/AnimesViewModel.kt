@@ -1,13 +1,13 @@
 package com.fabiano.faoanime.screens.animes
 
 import android.graphics.drawable.Drawable
+import android.view.MenuItem
 import androidx.lifecycle.MutableLiveData
 import com.fabiano.faoanime.MyApplication
 import com.fabiano.faoanime.R
 import com.fabiano.faoanime.utils.extensions.debounce
 import com.fabiano.faoanime.bases.BaseViewModel
 import com.fabiano.faoanime.models.Anime
-import com.fabiano.faoanime.models.SearchItem
 import com.fabiano.faoanime.requests.SearchRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ class AnimesViewModel : BaseViewModel(), CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
     var animesLiveData: MutableLiveData<ArrayList<Anime>> = MutableLiveData()
-    var searchLiveData: MutableLiveData<SearchItem> = MutableLiveData()
+    var searchLiveData: MutableLiveData<MenuItem> = MutableLiveData()
 
     val textchanger: (String) -> Unit = debounce(
         500L,

@@ -1,6 +1,5 @@
 package com.fabiano.faoanime.screens.animes
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log.d
@@ -9,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,15 +16,11 @@ import com.fabiano.faoanime.R
 import com.fabiano.faoanime.bases.BaseDrawerFragment
 import com.fabiano.faoanime.databinding.FragmentAnimesBinding
 import com.fabiano.faoanime.interfaces.ResponseInterface
-import com.fabiano.faoanime.models.SearchItem
 import com.fabiano.faoanime.models.responses.SearchReponse
 import com.fabiano.faoanime.screens.animes.adapter.AnimesAdapter
 import com.fabiano.faoanime.utils.KeyboardUtils
 import com.fabiano.faoanime.utils.ViewAnimation
-import com.fabiano.faoanime.utils.extensions.closeKeyboard
-import com.fabiano.faoanime.utils.extensions.initTwoGridLayout
-import com.fabiano.faoanime.utils.extensions.onTextChanged
-import com.fabiano.faoanime.utils.extensions.showKeyboard
+import com.fabiano.faoanime.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_animes.*
 
 
@@ -68,7 +62,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
 
         animesViewModel.searchLiveData.observe(viewLifecycleOwner, Observer { searchItem ->
             isCollapse = !isCollapse
-            searchItem.itemMenu?.icon = animesViewModel.getSearchIcon(isCollapse)
+            searchItem?.icon = animesViewModel.getSearchIcon(isCollapse)
             animateSearch()
         })
     }
@@ -111,8 +105,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         val id: Int = item.itemId
         if (id == R.id.action_search) {
             if (animation.inAnimation) return false
-            val searchItem = SearchItem(itemMenu = item)
-            animesViewModel.searchLiveData.value = searchItem
+            animesViewModel.searchLiveData.value = item
             return true
         }
         return false
@@ -139,6 +132,6 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     }
 
     override fun error(error: String) {
-        d("response_fabiano", error)
+        activity?.toast(error)
     }
 }
