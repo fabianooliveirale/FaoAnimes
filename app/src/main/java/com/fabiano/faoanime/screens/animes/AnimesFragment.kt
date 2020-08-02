@@ -2,7 +2,6 @@ package com.fabiano.faoanime.screens.animes
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -17,12 +16,12 @@ import com.fabiano.faoanime.bases.BaseDrawerFragment
 import com.fabiano.faoanime.databinding.FragmentAnimesBinding
 import com.fabiano.faoanime.interfaces.ResponseInterface
 import com.fabiano.faoanime.models.responses.SearchReponse
+import com.fabiano.faoanime.screens.animes.adapter.AnimeDataSource
 import com.fabiano.faoanime.screens.animes.adapter.AnimesAdapter
 import com.fabiano.faoanime.utils.KeyboardUtils
 import com.fabiano.faoanime.utils.ViewAnimation
 import com.fabiano.faoanime.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_animes.*
-
 
 class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, ResponseInterface {
 
@@ -51,13 +50,14 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         super.onViewCreated(view, savedInstanceState)
         initInputText()
         initAnimation()
-        initRecyclerView()
         liveData()
+        adapter = AnimesAdapter()
+        recyclerView.initTwoGridLayout(adapter)
     }
 
     private fun liveData() {
         animesViewModel.animesLiveData.observe(viewLifecycleOwner, Observer { animes ->
-            adapter?.replace(animes)
+            adapter?.submitList(animes)
         })
 
         animesViewModel.searchLiveData.observe(viewLifecycleOwner, Observer { searchItem ->
@@ -65,11 +65,6 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
             searchItem?.icon = animesViewModel.getSearchIcon(isCollapse)
             animateSearch()
         })
-    }
-
-    private fun initRecyclerView() {
-        adapter = AnimesAdapter()
-        recyclerView.initTwoGridLayout(adapter)
     }
 
     private fun initAnimation() {
@@ -80,6 +75,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     private fun initToolbar() {
         setHasOptionsMenu(true)
         animesViewModel.toolbarTitle = getString(R.string.animes)
+        animesViewModel.context = activity
         fragmentHomeBinding.toolbarInclude.viewModel = animesViewModel
         fragmentHomeBinding.toolbarInclude.toolbar.inflateMenu(R.menu.toolbar_menu)
         fragmentHomeBinding.toolbarInclude.toolbar.setOnMenuItemClickListener(this)
@@ -133,7 +129,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         (response as SearchReponse)
         activity?.runOnUiThread {
             val animes = response.results
-            adapter?.replace(animes)
+            adapter?.replacePagedList(animes?.toPagedList())
         }
     }
 

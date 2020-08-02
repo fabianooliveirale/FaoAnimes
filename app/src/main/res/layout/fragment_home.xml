@@ -4,12 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screens.home.HomeFragment">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.fabiano.faoanime.screens.home.HomeViewModel" />
-    </data>
-
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"

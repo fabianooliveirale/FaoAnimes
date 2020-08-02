@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class SearchRequest(
     var value: String,
+    var page: Int,
     var closure: (response: SearchReponse?, error: String?) -> (Unit)
 ) {
     init {
@@ -20,7 +21,7 @@ class SearchRequest(
     }
 
     private fun init() {
-        val observable = NetworkApi.public().search(value)
+        val observable = NetworkApi.public().search(value, page)
         observable.subscribeOn(Schedulers.newThread())
             .subscribe(object : Observer<SearchReponse> {
                 override fun onComplete() {}

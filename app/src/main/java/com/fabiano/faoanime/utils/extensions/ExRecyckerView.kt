@@ -8,5 +8,6 @@ fun <T> RecyclerView.initTwoGridLayout(adapter: T) {
     val linearLayoutManager = GridLayoutManager(this.context, 2)
     linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
     this.layoutManager = linearLayoutManager
+    this.setHasFixedSize(true)
     this.adapter = adapter as RecyclerView.Adapter<*>
 }

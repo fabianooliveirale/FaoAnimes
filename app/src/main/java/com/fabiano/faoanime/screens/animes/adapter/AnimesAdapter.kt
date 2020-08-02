@@ -1,8 +1,10 @@
 package com.fabiano.faoanime.screens.animes.adapter
 
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,8 +13,6 @@ import com.fabiano.faoanime.databinding.AdapterAnimesBinding
 import com.fabiano.faoanime.models.Anime
 
 class AnimesAdapter : PagedListAdapter<Anime, AnimesAdapter.AnimesViewHolder>(diffUtil) {
-    private var animes: ArrayList<Anime> = ArrayList()
-
     inner class AnimesViewHolder(
         val adapterAnimesBinding: AdapterAnimesBinding
     ) : RecyclerView.ViewHolder(adapterAnimesBinding.root)
@@ -30,21 +30,26 @@ class AnimesAdapter : PagedListAdapter<Anime, AnimesAdapter.AnimesViewHolder>(di
         return AnimesViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = animes.count()
-
     override fun onBindViewHolder(holder: AnimesAdapter.AnimesViewHolder, position: Int) {
-        holder.adapterAnimesBinding.anime = animes[position]
+        holder.adapterAnimesBinding.anime = this.getItem(position)
         holder.adapterAnimesBinding.position = position
+    }
 
+    fun replacePagedList(list: PagedList<Anime>?){
+        this.submitList(null)
+        this.submitList(list)
+        this.notifyDataSetChanged()
     }
 
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<Anime>() {
-            override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean =
-                oldItem.malId == newItem.malId
+            override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean {
+                return oldItem.malId == newItem.malId
+            }
 
-            override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean =
-                oldItem == newItem
+            override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }

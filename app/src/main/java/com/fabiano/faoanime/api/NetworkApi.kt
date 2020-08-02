@@ -14,7 +14,8 @@ import retrofit2.http.Query
 interface NetworkApi {
     @GET("search/anime")
     fun search(
-        @Query("q") seachString: String
+        @Query("q") seachString: String,
+        @Query("page") page: Int
     ): Observable<SearchReponse>
 
     companion object Factory {

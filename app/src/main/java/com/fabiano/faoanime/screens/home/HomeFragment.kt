@@ -35,7 +35,6 @@ class HomeFragment : BaseDrawerFragment() {
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         homeViewModel.drawerInterface = this
         homeViewModel.toolbarTitle = getString(R.string.home)
-        fragmentHomeBinding.viewModel = homeViewModel
         fragmentHomeBinding.navigationInclude.viewModel = homeViewModel
         fragmentHomeBinding.toolbarInclude.viewModel = homeViewModel
     }
