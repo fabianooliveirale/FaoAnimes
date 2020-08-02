@@ -1,14 +1,21 @@
 package com.fabiano.faoanime.utils
 
-import android.content.Context
+import android.R.attr.animationDuration
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
+import android.content.res.Resources
 import android.os.Handler
 import android.util.TypedValue
 import android.view.View
 import android.view.animation.PathInterpolator
+import androidx.core.animation.doOnEnd
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import com.fabiano.faoanime.MyApplication
+import com.fabiano.faoanime.models.responses.SearchReponse
 
 
 class ViewAnimation {
@@ -28,124 +35,26 @@ class ViewAnimation {
                 .duration(duration)
                 .interpolate(easeOut)
                 .onStart {
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
+                    inAnimation = true
+                    view.isGone = false
+                }.onEnd {
+                    inAnimation = false
+                }.playOn(view)
         }, delay)
     }
 
     fun slideInLeft(view: View, delay: Long = 0, duration: Long = baseDurationAnime) {
-        view.isVisible = false
         handler?.postDelayed({
             YoYo.with(Techniques.SlideInLeft)
                 .duration(duration)
                 .interpolate(easeOut)
                 .onStart {
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
-        }, delay)
-    }
-
-    fun splashImageFadeInUp(
-        view: View,
-        delay: Long = 0,
-        duration: Long = baseDurationAnime,
-        context: Context
-    ) {
-        val translationX =
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                -45F,
-                context.resources.displayMetrics
-            )
-        view.visibility = View.INVISIBLE
-        handler?.postDelayed({
-            YoYo.with(Techniques.FadeInUp)
-                .duration(duration)
-                .interpolate(easeOut)
-                .onStart {
-                    view.translationX = translationX
-                    view.scaleX = 1.7F
-                    view.scaleY = 1.7F
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
-        }, delay)
-    }
-
-    fun splashImageFadeInDown(
-        view: View,
-        context: Context,
-        delay: Long = 0,
-        duration: Long = baseDurationAnime
-    ) {
-        val translationX =
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                45F,
-                context.resources.displayMetrics
-            )
-        view.visibility = View.INVISIBLE
-        handler?.postDelayed({
-            YoYo.with(Techniques.FadeInDown)
-                .duration(duration)
-                .interpolate(easeOut)
-                .onStart {
-                    view.translationX =
-                        translationX
-                    view.scaleX = 1.3F
-                    view.scaleY = 1.3F
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
-        }, delay)
-    }
-
-    fun fadeIn(
-        view: View,
-        delay: Long = 0,
-        durationAnimation: Long = baseDurationAnime,
-        ended: (() -> Unit)? = null
-    ) {
-        view.visibility = View.INVISIBLE
-        handler?.postDelayed({
-            YoYo.with(Techniques.FadeIn)
-                .duration(durationAnimation)
-                .interpolate(easeOut)
-                .onStart {
-                    view.visibility = View.VISIBLE
+                    inAnimation = true
+                    view.isGone = false
                 }.onEnd {
-                    if (ended != null) {
-                        ended()
-                    }
-                }
-                .playOn(view)
+                    inAnimation = false
+                }.playOn(view)
         }, delay)
-    }
-
-    fun fadeInUp(
-        view: View,
-        delay: Long = 0,
-        durationAnimation: Long = baseDurationAnime,
-        ended: (() -> Unit)? = null
-    ) {
-        try {
-            view.visibility = View.INVISIBLE
-            handler?.postDelayed({
-                YoYo.with(Techniques.FadeInUp)
-                    .duration(durationAnimation)
-                    .interpolate(easeOut)
-                    .onStart {
-                        view.visibility = View.VISIBLE
-                    }.onEnd {
-                        if (ended != null) {
-                            ended()
-                        }
-                    }.playOn(view)
-            }, delay)
-        } catch (e: Exception) {
-        }
     }
 
     fun fadeInLeft(
@@ -153,15 +62,16 @@ class ViewAnimation {
         delay: Long = 0,
         durationAnimation: Long = baseDurationAnime
     ) {
-        view.visibility = View.INVISIBLE
         handler?.postDelayed({
             YoYo.with(Techniques.FadeInLeft)
                 .duration(durationAnimation)
                 .interpolate(easeOut)
                 .onStart {
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
+                    inAnimation = true
+                    view.isGone = false
+                }.onEnd {
+                    inAnimation = false
+                }.playOn(view)
         }, delay)
     }
 
@@ -170,15 +80,16 @@ class ViewAnimation {
         delay: Long = 0,
         durationAnimation: Long = baseDurationAnime
     ) {
-        view.visibility = View.INVISIBLE
         handler?.postDelayed({
             YoYo.with(Techniques.FadeInRight)
                 .duration(durationAnimation)
                 .interpolate(easeOut)
                 .onStart {
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
+                    inAnimation = true
+                    view.isGone = false
+                }.onEnd {
+                    inAnimation = false
+                }.playOn(view)
         }, delay)
     }
 
@@ -220,33 +131,6 @@ class ViewAnimation {
                 }.onEnd {
                     inAnimation = false
                 }.playOn(view)
-        }, delay)
-    }
-
-    fun slideInUpImage(
-        view: View,
-        delay: Long = 0,
-        durationAnimation: Long = baseDurationAnime,
-        context: Context
-    ) {
-        val translationX =
-            TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                -45F,
-                context.resources.displayMetrics
-            )
-        view.visibility = View.INVISIBLE
-        handler?.postDelayed({
-            YoYo.with(Techniques.SlideInUp)
-                .duration(durationAnimation)
-                .interpolate(easeOut)
-                .onStart {
-                    view.translationX = translationX
-                    view.scaleX = 1.7F
-                    view.scaleY = 1.7F
-                    view.visibility = View.VISIBLE
-                }
-                .playOn(view)
         }, delay)
     }
 
@@ -306,6 +190,82 @@ class ViewAnimation {
         }, delay)
     }
 
+    fun increaseViewSize(
+        view: View,
+        value: Int,
+        delay: Long = 0,
+        duration: Long = baseDurationAnime,
+        closure: () -> (Unit) = {}
+    ) {
+        val r: Resources = MyApplication.context.resources
+        val dpHeight = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value.toFloat(),
+            r.displayMetrics
+        )
+
+        inAnimation = true
+        val valueAnimator =
+            ValueAnimator.ofInt(view.measuredHeight, view.measuredHeight + dpHeight.toInt())
+        handler?.postDelayed({
+            valueAnimator.duration = duration
+            valueAnimator.addUpdateListener {
+                val animatedValue = valueAnimator.animatedValue as Int
+                val layoutParams = view.layoutParams
+                layoutParams.height = animatedValue
+                view.layoutParams = layoutParams
+            }
+
+            valueAnimator.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    inAnimation = false
+                    closure()
+                }
+            })
+
+            valueAnimator.start()
+        }, delay)
+    }
+
+    fun decreaseViewSize(
+        view: View,
+        value: Int,
+        delay: Long = 0,
+        duration: Long = baseDurationAnime,
+        closure: () -> (Unit) = {}
+    ) {
+
+        val r: Resources = MyApplication.context.resources
+        val dpHeight = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value.toFloat(),
+            r.displayMetrics
+        )
+
+        inAnimation = true
+        val valueAnimator =
+            ValueAnimator.ofInt(view.measuredHeight, view.measuredHeight - dpHeight.toInt())
+        handler?.postDelayed({
+            valueAnimator.duration = duration
+            valueAnimator.addUpdateListener {
+                val animatedValue = valueAnimator.animatedValue as Int
+                val layoutParams = view.layoutParams
+                layoutParams.height = animatedValue
+                view.layoutParams = layoutParams
+            }
+
+            valueAnimator.addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    inAnimation = false
+                    closure()
+                }
+            })
+
+            valueAnimator.start()
+        }, delay)
+    }
+
+
     fun fadeIn(
         view: View,
         delay: Long = 0,
@@ -340,6 +300,30 @@ class ViewAnimation {
                     inAnimation = false
                     view.isGone = true
                 }.playOn(view)
+        }, delay)
+    }
+
+    private fun viewGoneAnimator(view: View) {
+        view.animate()
+            .alpha(0f)
+            .setDuration(animationDuration.toLong())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    view.isGone = true
+                }
+            })
+    }
+
+    fun viewVisibleAnimator(view: View, delay: Long = 0) {
+        handler?.postDelayed({
+            view.animate()
+                .alpha(1f)
+                .setDuration(animationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        view.isVisible = true
+                    }
+                })
         }, delay)
     }
 }

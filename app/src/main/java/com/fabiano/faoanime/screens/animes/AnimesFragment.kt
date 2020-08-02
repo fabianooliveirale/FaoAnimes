@@ -1,10 +1,13 @@
 package com.fabiano.faoanime.screens.animes
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log.d
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
@@ -18,17 +21,23 @@ import com.fabiano.faoanime.interfaces.ResponseInterface
 import com.fabiano.faoanime.models.SearchItem
 import com.fabiano.faoanime.models.responses.SearchReponse
 import com.fabiano.faoanime.screens.animes.adapter.AnimesAdapter
+import com.fabiano.faoanime.utils.KeyboardUtils
 import com.fabiano.faoanime.utils.ViewAnimation
+import com.fabiano.faoanime.utils.extensions.closeKeyboard
 import com.fabiano.faoanime.utils.extensions.initTwoGridLayout
 import com.fabiano.faoanime.utils.extensions.onTextChanged
+import com.fabiano.faoanime.utils.extensions.showKeyboard
 import kotlinx.android.synthetic.main.fragment_animes.*
+
 
 class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, ResponseInterface {
 
     lateinit var animesViewModel: AnimesViewModel
     lateinit var fragmentHomeBinding: FragmentAnimesBinding
-    lateinit var adapter: AnimesAdapter
+    var adapter: AnimesAdapter? = null
     private val animation = ViewAnimation()
+    private var searchHeight = 0
+    private var isCollapse = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,23 +63,24 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
 
     private fun liveData() {
         animesViewModel.animesLiveData.observe(viewLifecycleOwner, Observer { animes ->
-            adapter.replace(animes)
+            adapter?.replace(animes)
         })
 
         animesViewModel.searchLiveData.observe(viewLifecycleOwner, Observer { searchItem ->
-            searchItem.itemMenu?.icon = animesViewModel.getSearchIcon(searchItem.isGone ?: false)
-            animateSearch(searchItem.isGone ?: false)
+            isCollapse = !isCollapse
+            searchItem.itemMenu?.icon = animesViewModel.getSearchIcon(isCollapse)
+            animateSearch()
         })
     }
 
     private fun initRecyclerView() {
-        with(recyclerView) {
-            this.initTwoGridLayout(adapter)
-        }
+        adapter = AnimesAdapter()
+        recyclerView.initTwoGridLayout(adapter)
     }
 
     private fun initAnimation() {
-        animation.slideInDown(toolbarInclude)
+        searchHeight = constraintSearch.layoutParams.height
+        animation.fadeInDown(toolbarInclude)
     }
 
     private fun initToolbar() {
@@ -100,20 +110,32 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val id: Int = item.itemId
         if (id == R.id.action_search) {
-            val searchItem = SearchItem(isGone = constraintSearch.isGone, itemMenu = item)
+            if (animation.inAnimation) return false
+            val searchItem = SearchItem(itemMenu = item)
             animesViewModel.searchLiveData.value = searchItem
             return true
         }
         return false
     }
 
-    private fun animateSearch(isGone: Boolean) =
-        if (isGone) animation.fadeInDown(constraintSearch) else animation.fadeOutUp(constraintSearch)
+    private fun animateSearch() {
+        if (isCollapse) {
+            animation.decreaseViewSize(constraintSearch, 70, duration = 450) {
+                editTextSearch.clearFocus()
+                KeyboardUtils.forceCloseKeyboard(editTextSearch)
+            }
+        } else {
+            animation.increaseViewSize(constraintSearch, 70, duration = 450) {
+                editTextSearch.requestFocus()
+                KeyboardUtils.toggleKeyboardVisibility(activity)
+            }
+        }
+    }
 
     override fun <T> success(response: T) {
         (response as SearchReponse)
         val animes = response.results
-        adapter.replace(animes)
+        adapter?.replace(animes)
     }
 
     override fun error(error: String) {

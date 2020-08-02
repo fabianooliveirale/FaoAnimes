@@ -26,11 +26,9 @@ class AnimesViewModel : BaseViewModel(), CoroutineScope {
         requestSearch(searchString)
     }
 
-
-    fun getSearchIcon(isGone: Boolean): Drawable? =
-        if (isGone) MyApplication.context.getDrawable(R.drawable.ic_close)
-        else MyApplication.context.getDrawable(R.drawable.ic_search)
-
+    fun getSearchIcon(isCollapse: Boolean): Drawable? =
+        if (isCollapse) MyApplication.context.getDrawable(R.drawable.ic_search)
+        else MyApplication.context.getDrawable(R.drawable.ic_close)
 
     private fun requestSearch(searchString: String) {
         SearchRequest(searchString) { value, error ->

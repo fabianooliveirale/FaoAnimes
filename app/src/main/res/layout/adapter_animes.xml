@@ -9,6 +9,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -23,11 +24,13 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
+                android:layout_height="220dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_launcher_background" />
+                app:imageUrl="@{anime.imageUrl}" />
 
             <TextView
                 android:id="@+id/textViewTitle"
