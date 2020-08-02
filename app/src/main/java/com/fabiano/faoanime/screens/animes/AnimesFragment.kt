@@ -114,11 +114,15 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     private fun animateSearch() {
         if (isCollapse) {
             animation.decreaseViewSize(constraintSearch, 70, duration = 450) {
+                needFocus = false
+                viewFocus = editTextSearch
                 editTextSearch.clearFocus()
                 KeyboardUtils.forceCloseKeyboard(editTextSearch)
             }
         } else {
             animation.increaseViewSize(constraintSearch, 70, duration = 450) {
+                needFocus = true
+                viewFocus = editTextSearch
                 editTextSearch.requestFocus()
                 KeyboardUtils.toggleKeyboardVisibility(activity)
             }
@@ -127,8 +131,10 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
 
     override fun <T> success(response: T) {
         (response as SearchReponse)
-        val animes = response.results
-        adapter?.replace(animes)
+        activity?.runOnUiThread {
+            val animes = response.results
+            adapter?.replace(animes)
+        }
     }
 
     override fun error(error: String) {

@@ -6,6 +6,10 @@
         <variable
             name="anime"
             type="com.fabiano.faoanime.models.Anime" />
+
+        <variable
+            name="position"
+            type="int" />
     </data>
 
     <LinearLayout
@@ -14,7 +18,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="8dp"
-        android:paddingTop="22dp">
+        android:paddingTop="22dp"
+        app:recyclerGridAnimation="@{position}">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,10 +32,10 @@
                 android:layout_height="220dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
+                app:imageUrl="@{anime.imageUrl}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:imageUrl="@{anime.imageUrl}" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewTitle"

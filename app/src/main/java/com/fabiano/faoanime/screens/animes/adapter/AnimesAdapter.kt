@@ -12,11 +12,9 @@ import com.fabiano.faoanime.R
 import com.fabiano.faoanime.databinding.AdapterAnimesBinding
 import com.fabiano.faoanime.models.Anime
 import com.fabiano.faoanime.utils.ViewAnimation
-import com.squareup.picasso.Picasso
 
 class AnimesAdapter : RecyclerView.Adapter<AnimesAdapter.AnimesViewHolder>() {
     private var animes: ArrayList<Anime> = ArrayList()
-    val animation = ViewAnimation()
 
     inner class AnimesViewHolder(
         val adapterAnimesBinding: AdapterAnimesBinding
@@ -39,11 +37,8 @@ class AnimesAdapter : RecyclerView.Adapter<AnimesAdapter.AnimesViewHolder>() {
 
     override fun onBindViewHolder(holder: AnimesAdapter.AnimesViewHolder, position: Int) {
         holder.adapterAnimesBinding.anime = animes[position]
+        holder.adapterAnimesBinding.position = position
 
-        if (position % 2 == 0)
-            animation.fadeInLeft(holder.adapterAnimesBinding.mainView, durationAnimation = 960)
-        else
-            animation.fadeInRight(holder.adapterAnimesBinding.mainView, durationAnimation = 960)
     }
 
     fun replace(animes: ArrayList<Anime>?) {
