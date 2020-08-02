@@ -50,11 +50,7 @@ class AnimesViewModel : BaseViewModel(), CoroutineScope {
         else MyApplication.context.getDrawable(R.drawable.ic_close)
 
     private fun requestSearch(stringSearch: String) {
-
-//        SearchRequest(stringSearch, 1) { value, error ->
-//
-//            if (error != null) responseInterface?.success(value)
-//            if (error != null) responseInterface?.error(error)
-//        }
+        AnimeDataSource.stringSearch = stringSearch
+        liveData.value?.dataSource?.invalidate()
     }
 }
