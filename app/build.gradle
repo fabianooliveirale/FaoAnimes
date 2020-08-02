@@ -98,4 +98,5 @@ dependencies {
     //picasso
     def picasso_version = '2.71828'
     implementation "com.squareup.picasso:picasso:$picasso_version"
+    implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
 }

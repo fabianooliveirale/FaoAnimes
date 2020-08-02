@@ -1,19 +1,16 @@
 package com.fabiano.faoanime.screens.animes.adapter
 
-import android.util.Log
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.fabiano.faoanime.R
 import com.fabiano.faoanime.databinding.AdapterAnimesBinding
 import com.fabiano.faoanime.models.Anime
-import com.fabiano.faoanime.utils.ViewAnimation
 
-class AnimesAdapter : RecyclerView.Adapter<AnimesAdapter.AnimesViewHolder>() {
+class AnimesAdapter : PagedListAdapter<Anime, AnimesAdapter.AnimesViewHolder>(diffUtil) {
     private var animes: ArrayList<Anime> = ArrayList()
 
     inner class AnimesViewHolder(
@@ -41,10 +38,14 @@ class AnimesAdapter : RecyclerView.Adapter<AnimesAdapter.AnimesViewHolder>() {
 
     }
 
-    fun replace(animes: ArrayList<Anime>?) {
-        this.animes.clear()
-        this.animes = animes ?: arrayListOf()
-        notifyDataSetChanged()
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<Anime>() {
+            override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean =
+                oldItem.malId == newItem.malId
+
+            override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean =
+                oldItem == newItem
+        }
     }
 }
 
