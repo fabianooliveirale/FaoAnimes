@@ -35,12 +35,6 @@ class AnimesAdapter : PagedListAdapter<Anime, AnimesAdapter.AnimesViewHolder>(di
         holder.adapterAnimesBinding.position = position
     }
 
-    fun replacePagedList(list: PagedList<Anime>?){
-        this.submitList(null)
-        this.submitList(list)
-        this.notifyDataSetChanged()
-    }
-
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<Anime>() {
             override fun areItemsTheSame(oldItem: Anime, newItem: Anime): Boolean {

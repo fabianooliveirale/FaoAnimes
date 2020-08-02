@@ -41,11 +41,9 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         initViewModel()
         initToolbar()
         initNavigation()
-
         return fragmentHomeBinding.root
     }
 
-    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initInputText()
@@ -129,7 +127,6 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         (response as SearchReponse)
         activity?.runOnUiThread {
             val animes = response.results
-            adapter?.replacePagedList(animes?.toPagedList())
         }
     }
 

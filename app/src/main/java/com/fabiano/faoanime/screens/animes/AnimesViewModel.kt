@@ -11,7 +11,6 @@ import com.fabiano.faoanime.MyApplication
 import com.fabiano.faoanime.R
 import com.fabiano.faoanime.bases.BaseViewModel
 import com.fabiano.faoanime.models.Anime
-import com.fabiano.faoanime.requests.SearchRequest
 import com.fabiano.faoanime.screens.animes.adapter.AnimeDataSource
 import com.fabiano.faoanime.utils.extensions.debounce
 import kotlinx.coroutines.CoroutineScope
@@ -25,32 +24,25 @@ class AnimesViewModel : BaseViewModel(), CoroutineScope {
     var animesLiveData: LiveData<PagedList<Anime>> = MutableLiveData()
     var searchLiveData: MutableLiveData<MenuItem> = MutableLiveData()
 
-    var animeDataSource = AnimeDataSource.Companion.DataSourceFactory("")
-
-    private val pagedListConfig = PagedList.Config.Builder()
+    val pagedListConfig = PagedList.Config.Builder()
         .setPageSize(20)
         .setInitialLoadSizeHint(30)
         .setPrefetchDistance(10)
         .setEnablePlaceholders(false)
         .build()
 
-    private var livePagedList = LivePagedListBuilder(animeDataSource, pagedListConfig)
+    var animeDataSource = AnimeDataSource.Companion.DataSourceFactory()
+    val liveData = LivePagedListBuilder(animeDataSource, pagedListConfig).build()
 
     init {
-        initList()
-    }
-
-    fun initList() {
-        animesLiveData = livePagedList.build()
+        animesLiveData = liveData
     }
 
     val textchanger: (String) -> Unit = debounce(
         800L,
         this
     ) { searchString ->
-        animeDataSource = AnimeDataSource.Companion.DataSourceFactory(searchString)
-        livePagedList = LivePagedListBuilder(animeDataSource, pagedListConfig)
-        livePagedList.build()
+        requestSearch(searchString)
     }
 
     fun getSearchIcon(isCollapse: Boolean): Drawable? =
@@ -58,9 +50,11 @@ class AnimesViewModel : BaseViewModel(), CoroutineScope {
         else MyApplication.context.getDrawable(R.drawable.ic_close)
 
     private fun requestSearch(stringSearch: String) {
-        SearchRequest(stringSearch, 1) { value, error ->
-            if (value != null) responseInterface?.success(value)
-            if (error != null) responseInterface?.error(error)
-        }
+
+//        SearchRequest(stringSearch, 1) { value, error ->
+//
+//            if (error != null) responseInterface?.success(value)
+//            if (error != null) responseInterface?.error(error)
+//        }
     }
 }
