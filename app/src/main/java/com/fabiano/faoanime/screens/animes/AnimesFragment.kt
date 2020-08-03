@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isGone
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -146,13 +147,15 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     }
 
     private fun dismissLoading(view: View) {
-        if (view.layoutParams.height > 0)
-            animation.decreaseViewSize(view, 70, duration = 350)
+        activity?.runOnUiThread {
+            if (!view.isGone) view.isGone = true
+        }
     }
 
     private fun showLoading(view: View) {
-        if (view.layoutParams.height == 0)
-            animation.increaseViewSize(view, 70, duration = 450)
+        activity?.runOnUiThread {
+            if (view.isGone) view.isGone = false
+        }
     }
 
     override fun onStop() {
