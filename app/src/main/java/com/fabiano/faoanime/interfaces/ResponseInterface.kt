@@ -1,6 +1,10 @@
 package com.fabiano.faoanime.interfaces
 
 interface ResponseInterface {
-    fun <T> success(response: T) : Unit?
-    fun error(error: String) : Unit?
+    fun loading()
+    fun afterLoading()
+    fun beforeLoading()
+    fun dismissLoading()
+    fun <T> success(response: T?)
+    fun error(error: String)
 }

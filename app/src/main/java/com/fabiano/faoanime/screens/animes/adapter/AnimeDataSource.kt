@@ -1,22 +1,39 @@
 package com.fabiano.faoanime.screens.animes.adapter
 
-import android.util.Log.d
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
+import com.fabiano.faoanime.interfaces.ResponseInterface
 import com.fabiano.faoanime.models.Anime
 import com.fabiano.faoanime.requests.SearchRequest
+import com.fabiano.faoanime.screens.animes.AnimesViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class AnimeDataSource : PageKeyedDataSource<Int, Anime>() {
+class AnimeDataSource(
+    private val responseInterface: ResponseInterface,
+    val viewModel: AnimesViewModel
+) :
+    PageKeyedDataSource<Int, Anime>() {
+
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Anime>
     ) {
-        d("fabiano_teste_search_string", "chamou_initial")
-        val page = 1
-
-        SearchRequest(stringSearch, page) { value, error ->
-            if (value != null) callback.onResult(value.results ?: arrayListOf(),null, page)
-            if (error != null) { }
+        viewModel.launch {
+            if (stringSearch == "") return@launch
+            val page = 1
+            responseInterface.loading()
+            SearchRequest(stringSearch, page) { value, error ->
+                if (value != null) {
+                    callback.onResult(value.results ?: arrayListOf(), null, page)
+                }
+                if (error != null) {
+                    responseInterface.error(error)
+                }
+                responseInterface.dismissLoading()
+            }
         }
     }
 
@@ -24,11 +41,19 @@ class AnimeDataSource : PageKeyedDataSource<Int, Anime>() {
         params: LoadParams<Int>,
         callback: LoadCallback<Int, Anime>
     ) {
-        val page = params.key + 1
-        d("fabiano_teste_search_string", "after")
-        SearchRequest(stringSearch, page) { value, error ->
-            if (value != null) callback.onResult(value.results ?: arrayListOf(), page)
-            if (error != null) { }
+        viewModel.launch {
+            if (stringSearch == "") return@launch
+            val page = params.key + 1
+            responseInterface.afterLoading()
+            SearchRequest(stringSearch, page) { value, error ->
+                if (value != null) {
+                    callback.onResult(value.results ?: arrayListOf(), page)
+                }
+                if (error != null) {
+                    responseInterface.error(error)
+                }
+                responseInterface.dismissLoading()
+            }
         }
     }
 
@@ -36,20 +61,32 @@ class AnimeDataSource : PageKeyedDataSource<Int, Anime>() {
         params: LoadParams<Int>,
         callback: LoadCallback<Int, Anime>
     ) {
-        val page = params.key - 1
-        d("fabiano_teste_search_string", "before")
-        SearchRequest(stringSearch, page) { value, error ->
-            if (value != null) callback.onResult(value.results ?: arrayListOf(), page)
-            if (error != null) {
-
+        viewModel.launch {
+            if (stringSearch == "") return@launch
+            val page = params.key - 1
+            responseInterface.loading()
+            SearchRequest(stringSearch, page) { value, error ->
+                if (value != null) {
+                    callback.onResult(value.results ?: arrayListOf(), page)
+                }
+                if (error != null) {
+                    responseInterface.error(error)
+                }
+                responseInterface.dismissLoading()
             }
         }
     }
 
     companion object {
-        var stringSearch = "naruto"
-        class DataSourceFactory : DataSource.Factory<Int, Anime>() {
-            override fun create(): DataSource<Int, Anime> = AnimeDataSource()
+        var stringSearch = ""
+
+        class DataSourceFactory(
+            private val responseInterface: ResponseInterface,
+            val viewModel: AnimesViewModel
+        ) :
+            DataSource.Factory<Int, Anime>() {
+            override fun create(): DataSource<Int, Anime> =
+                AnimeDataSource(responseInterface, viewModel)
         }
     }
 }

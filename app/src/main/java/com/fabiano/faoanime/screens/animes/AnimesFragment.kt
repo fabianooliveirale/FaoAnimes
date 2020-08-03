@@ -1,6 +1,5 @@
 package com.fabiano.faoanime.screens.animes
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -15,13 +14,13 @@ import com.fabiano.faoanime.R
 import com.fabiano.faoanime.bases.BaseDrawerFragment
 import com.fabiano.faoanime.databinding.FragmentAnimesBinding
 import com.fabiano.faoanime.interfaces.ResponseInterface
-import com.fabiano.faoanime.models.responses.SearchReponse
 import com.fabiano.faoanime.screens.animes.adapter.AnimeDataSource
 import com.fabiano.faoanime.screens.animes.adapter.AnimesAdapter
 import com.fabiano.faoanime.utils.KeyboardUtils
 import com.fabiano.faoanime.utils.ViewAnimation
 import com.fabiano.faoanime.utils.extensions.*
 import kotlinx.android.synthetic.main.fragment_animes.*
+import kotlinx.coroutines.cancel
 
 class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, ResponseInterface {
 
@@ -29,7 +28,6 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     lateinit var fragmentHomeBinding: FragmentAnimesBinding
     var adapter: AnimesAdapter? = null
     private val animation = ViewAnimation()
-    private var searchHeight = 0
     private var isCollapse = true
 
     override fun onCreateView(
@@ -66,14 +64,12 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     }
 
     private fun initAnimation() {
-        searchHeight = constraintSearch.layoutParams.height
         animation.fadeInDown(toolbarInclude)
     }
 
     private fun initToolbar() {
         setHasOptionsMenu(true)
         animesViewModel.toolbarTitle = getString(R.string.animes)
-        animesViewModel.context = activity
         fragmentHomeBinding.toolbarInclude.viewModel = animesViewModel
         fragmentHomeBinding.toolbarInclude.toolbar.inflateMenu(R.menu.toolbar_menu)
         fragmentHomeBinding.toolbarInclude.toolbar.setOnMenuItemClickListener(this)
@@ -91,6 +87,7 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         animesViewModel = ViewModelProvider(this).get(AnimesViewModel::class.java)
         animesViewModel.drawerInterface = this
         animesViewModel.responseInterface = this
+        animesViewModel.initDataSource()
         fragmentHomeBinding.viewModel = animesViewModel
         fragmentHomeBinding.navigationInclude.viewModel = animesViewModel
     }
@@ -123,14 +120,44 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
         }
     }
 
-    override fun <T> success(response: T) {
-        (response as SearchReponse)
-        activity?.runOnUiThread {
-            val animes = response.results
-        }
+    override fun <T> success(response: T?) {
+
     }
 
     override fun error(error: String) {
         activity?.toast(error)
+    }
+
+    override fun loading() {
+        showLoading(beforeProgressBar)
+    }
+
+    override fun afterLoading() {
+        showLoading(afterProgressBar)
+    }
+
+    override fun beforeLoading() {
+        showLoading(beforeProgressBar)
+    }
+
+    override fun dismissLoading() {
+        dismissLoading(beforeProgressBar)
+        dismissLoading(afterProgressBar)
+    }
+
+    private fun dismissLoading(view: View) {
+        if (view.layoutParams.height > 0)
+            animation.decreaseViewSize(view, 70, duration = 350)
+    }
+
+    private fun showLoading(view: View) {
+        if (view.layoutParams.height == 0)
+            animation.increaseViewSize(view, 70, duration = 450)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        AnimeDataSource.stringSearch = ""
+        animesViewModel.cancel()
     }
 }

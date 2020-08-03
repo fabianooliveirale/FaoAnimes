@@ -61,15 +61,29 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/beforeProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:indeterminateDrawable="@drawable/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintSearch" />
 
+            <ProgressBar
+                android:id="@+id/afterProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:indeterminateDrawable="@drawable/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
         </LinearLayout>
 
         <com.google.android.material.navigation.NavigationView

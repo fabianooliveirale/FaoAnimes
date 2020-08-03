@@ -16,6 +16,7 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.fabiano.faoanime.MyApplication
 import com.fabiano.faoanime.models.responses.SearchReponse
+import com.fabiano.faoanime.utils.extensions.toDP
 
 
 class ViewAnimation {
@@ -197,12 +198,8 @@ class ViewAnimation {
         duration: Long = baseDurationAnime,
         closure: () -> (Unit) = {}
     ) {
-        val r: Resources = MyApplication.context.resources
-        val dpHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            value.toFloat(),
-            r.displayMetrics
-        )
+
+        val dpHeight = value.toDP()
 
         inAnimation = true
         val valueAnimator =
@@ -235,12 +232,7 @@ class ViewAnimation {
         closure: () -> (Unit) = {}
     ) {
 
-        val r: Resources = MyApplication.context.resources
-        val dpHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            value.toFloat(),
-            r.displayMetrics
-        )
+        val dpHeight = value.toDP()
 
         inAnimation = true
         val valueAnimator =
