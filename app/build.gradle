@@ -99,4 +99,9 @@ dependencies {
     def picasso_version = '2.71828'
     implementation "com.squareup.picasso:picasso:$picasso_version"
     implementation 'androidx.paging:paging-runtime-ktx:2.1.2'
+
+    //TIME
+    def joda_version = '2.10.6'
+    implementation "joda-time:joda-time:$joda_version"
+    testImplementation "joda-time:joda-time:$joda_version"
 }

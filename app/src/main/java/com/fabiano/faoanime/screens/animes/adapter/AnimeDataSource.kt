@@ -4,12 +4,10 @@ import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
 import com.fabiano.faoanime.interfaces.ResponseInterface
 import com.fabiano.faoanime.models.Anime
-import com.fabiano.faoanime.requests.SearchRequest
+import com.fabiano.faoanime.requests.animes.GetAnimeOfTheSeasonRequest
+import com.fabiano.faoanime.requests.animes.SearchAnimeRequest
 import com.fabiano.faoanime.screens.animes.AnimesViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class AnimeDataSource(
     private val responseInterface: ResponseInterface,
@@ -22,17 +20,10 @@ class AnimeDataSource(
         callback: LoadInitialCallback<Int, Anime>
     ) {
         viewModel.launch {
-            if (stringSearch == "") return@launch
-            val page = 1
-            responseInterface.loading()
-            SearchRequest(stringSearch, page) { value, error ->
-                if (value != null) {
-                    callback.onResult(value.results ?: arrayListOf(), null, page)
-                }
-                if (error != null) {
-                    responseInterface.error(error)
-                }
-                responseInterface.dismissLoading()
+            if (stringSearch == "") {
+                getSeasonAnime(callbackInital = callback)
+            } else {
+                searchedAnime(callbackInital = callback)
             }
         }
     }
@@ -42,17 +33,11 @@ class AnimeDataSource(
         callback: LoadCallback<Int, Anime>
     ) {
         viewModel.launch {
-            if (stringSearch == "") return@launch
-            val page = params.key + 1
-            responseInterface.afterLoading()
-            SearchRequest(stringSearch, page) { value, error ->
-                if (value != null) {
-                    callback.onResult(value.results ?: arrayListOf(), page)
-                }
-                if (error != null) {
-                    responseInterface.error(error)
-                }
-                responseInterface.dismissLoading()
+            if (stringSearch == "") {
+                getSeasonAnime(callback)
+            } else {
+                val page = params.key + 1
+                searchedAnime(callback, page = page)
             }
         }
     }
@@ -62,18 +47,50 @@ class AnimeDataSource(
         callback: LoadCallback<Int, Anime>
     ) {
         viewModel.launch {
-            if (stringSearch == "") return@launch
-            val page = params.key - 1
-            responseInterface.loading()
-            SearchRequest(stringSearch, page) { value, error ->
-                if (value != null) {
-                    callback.onResult(value.results ?: arrayListOf(), page)
-                }
-                if (error != null) {
-                    responseInterface.error(error)
-                }
-                responseInterface.dismissLoading()
+            if (stringSearch == "") {
+                getSeasonAnime(callback)
+            } else {
+                val page = params.key - 1
+                searchedAnime(callback, page = page)
             }
+        }
+    }
+
+    private fun getSeasonAnime(
+        callback: LoadCallback<Int, Anime>? = null,
+        callbackInital: LoadInitialCallback<Int, Anime>? = null
+    ) {
+        responseInterface.loading()
+        GetAnimeOfTheSeasonRequest { value, error ->
+            if (value != null) {
+                callbackInital?.onResult(value, null, null)
+                callback?.onResult(value, null)
+            }
+            if (error != null) {
+                responseInterface.error(error)
+            }
+            responseInterface.dismissLoading()
+        }
+    }
+
+    private fun searchedAnime(
+        callback: LoadCallback<Int, Anime>? = null,
+        callbackInital: LoadInitialCallback<Int, Anime>? = null,
+        page: Int = 1
+    ) {
+        responseInterface.loading()
+        SearchAnimeRequest(
+            stringSearch,
+            page
+        ) { value, error ->
+            if (value != null) {
+                callbackInital?.onResult(value, null, page)
+                callback?.onResult(value, page)
+            }
+            if (error != null) {
+                responseInterface.error(error)
+            }
+            responseInterface.dismissLoading()
         }
     }
 

@@ -4,18 +4,13 @@ import android.R.attr.animationDuration
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.content.res.Resources
 import android.os.Handler
-import android.util.TypedValue
 import android.view.View
 import android.view.animation.PathInterpolator
-import androidx.core.animation.doOnEnd
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
-import com.fabiano.faoanime.MyApplication
-import com.fabiano.faoanime.models.responses.SearchReponse
 import com.fabiano.faoanime.utils.extensions.toDP
 
 

@@ -18,7 +18,7 @@ data class Anime(
     @SerializedName("type")
     val type: String? = null,
     @SerializedName("episodes")
-    val episodes: String? = null,
+    val episodes: Int? = null,
     @SerializedName("score")
     val score: Float? = null,
     @SerializedName("start_date")
@@ -28,5 +28,11 @@ data class Anime(
     @SerializedName("members")
     val members: Int? = null,
     @SerializedName("rated")
-    val rated: String? = null
+    val rated: String? = null,
+    @SerializedName("r18")
+    val r18: Boolean? = null,
+    @SerializedName("kids")
+    val kids: Boolean? = null,
+    @SerializedName("genres")
+    val genres: ArrayList<Genres>? = null
 )

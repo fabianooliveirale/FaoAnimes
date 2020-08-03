@@ -46,7 +46,6 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initInputText()
-        initAnimation()
         liveData()
         adapter = AnimesAdapter()
         recyclerView.initTwoGridLayout(adapter)
@@ -62,10 +61,6 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
             searchItem?.icon = animesViewModel.getSearchIcon(isCollapse)
             animateSearch()
         })
-    }
-
-    private fun initAnimation() {
-        animation.fadeInDown(toolbarInclude)
     }
 
     private fun initToolbar() {
@@ -126,7 +121,9 @@ class AnimesFragment : BaseDrawerFragment(), Toolbar.OnMenuItemClickListener, Re
     }
 
     override fun error(error: String) {
-        activity?.toast(error)
+        activity?.runOnUiThread {
+            activity?.toast(error)
+        }
     }
 
     override fun loading() {
