@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class Genres (
     @SerializedName("mal_id")
-    val malId: Boolean? = null,
+    val malId: Int? = null,
     @SerializedName("type")
-    val type: Boolean? = null,
+    val type: String? = null,
     @SerializedName("name")
-    val name: Boolean? = null,
+    val name: String? = null,
     @SerializedName("url")
-    val url: Boolean? = null
+    val url: String? = null
 )

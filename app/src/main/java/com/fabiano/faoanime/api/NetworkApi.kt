@@ -19,10 +19,7 @@ interface NetworkApi {
     fun searchAnime(
         @Query("q") seachString: String,
         @Query("page") page: Int,
-        @Query("rated") rateOne: String = "g",
-        @Query("rated") rateTwo: String = "pg",
-        @Query("rated") rateThree: String = "pg13",
-        @Query("rated") rateFour: String = "r"
+        @Query("type") rateOne: String = "tv"
     ): Observable<SearchReponse>
 
     @GET("season/{year}/{season}")
@@ -47,7 +44,8 @@ interface NetworkApi {
                 }
             }
 
-            val httpCliente = HttpClientBuilderFactory.create(interceptor, logInterceptor = logInterceptor)
+            val httpCliente =
+                HttpClientBuilderFactory.create(interceptor, logInterceptor = logInterceptor)
 
             val retrofit = Retrofit.Builder()
                 .baseUrl(BuildConfig.URLAPI)
